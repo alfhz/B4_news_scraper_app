@@ -67,7 +67,7 @@ Jika window aplikasi muncul → setup berhasil ✅
 
 ---
 
-# 🌿 5️⃣ WAJIB Buat Branch Masing-Masing
+# 5️⃣ WAJIB Buat Branch Masing-Masing
 
 ⚠ DILARANG kerja langsung di branch `main`.
 
@@ -85,7 +85,7 @@ Branch dengan tanda `*` adalah branch aktif.
 
 ---
 
-# 💾 6️⃣ Workflow Kerja Harian
+# 6️⃣ Workflow Kerja Harian
 
 Setiap selesai kerja:
 
@@ -99,7 +99,7 @@ Contoh:
 
 ---
 
-# 🔄 7️⃣ Update dari Main (Jika Diperlukan)
+# 7️⃣ Update dari Main (Jika Diperlukan)
 
 Jika branch `main` sudah di-update oleh anggota lain:
 
@@ -123,7 +123,7 @@ Jika ada konflik → diskusikan dulu sebelum resolve.
 
 ---
 
-# 📂 Struktur Project
+# 📂 Struktur Proyek
 
 B4_news_scraper_app/
 │
@@ -196,7 +196,7 @@ Aplikasi harus bisa:
 
 ---
 
-# 🔥 Tips Kerja Tim
+# 🔥 Attention!
 
 - Commit kecil tapi sering
 - Jangan tunggu file selesai 100% baru commit
@@ -205,5 +205,3 @@ Aplikasi harus bisa:
 - Jaga format data tetap konsisten
 
 ---
-
-Selamat mengerjakan 🚀
