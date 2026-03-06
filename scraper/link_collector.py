@@ -105,3 +105,90 @@ def get_article_links(url, limit):
                 driver.quit()
             except Exception:
                 pass
+
+
+# ============================================================
+#  HELPER FUNCTIONS
+# ============================================================
+
+def _get_base_domain(url):
+    """
+    Ambil domain dasar dari URL.
+    Contoh: "https://news.detik.com/kategori" → "detik.com"
+    """
+    try:
+        parsed = urlparse(url)
+        domain = parsed.netloc
+        if domain.startswith("www."):
+            domain = domain[4:]
+        # Ambil 2 level terakhir untuk base domain (misal: detik.com dari news.detik.com)
+        parts = domain.split(".")
+        if len(parts) >= 2:
+            return ".".join(parts[-2:])
+        return domain
+    except Exception:
+        return ""
+
+
+def _extract_article_links(driver, base_domain, source_url):
+    """
+    Ekstrak semua link artikel dari halaman yang sedang terbuka.
+    Filter hanya link yang kemungkinan besar adalah artikel berita.
+
+    Strategy:
+    1. Ambil semua <a> tag yang memiliki href
+    2. Filter berdasarkan domain (harus sama dengan base_domain)
+    3. Filter berdasarkan pola URL artikel (mengandung path yang cukup panjang)
+    4. Buang link navigasi, media sosial, category, tag, author, dll.
+    """
+    links = []
+
+    try:
+        all_anchors = driver.find_elements(By.TAG_NAME, "a")
+
+        for anchor in all_anchors:
+            try:
+                href = anchor.get_attribute("href")
+                if not href:
+                    continue
+
+                # Normalisasi URL relatif ke absolut
+                href = urljoin(source_url, href)
+
+                # Pastikan URL valid dan memiliki skema HTTP(S)
+                parsed = urlparse(href)
+                if parsed.scheme not in ("http", "https"):
+                    continue
+
+                # Filter: harus dari domain yang sama
+                link_domain = parsed.netloc
+                if link_domain.startswith("www."):
+                    link_domain = link_domain[4:]
+                # Cek apakah base domain ada di link domain
+                if base_domain not in link_domain:
+                    continue
+
+                # Filter: buang link non-artikel
+                if _is_non_article_link(href, source_url):
+                    continue
+
+                # Filter: URL artikel biasanya punya path yang cukup panjang
+                path = parsed.path.strip("/")
+                if not path or len(path) < 5:
+                    continue
+
+                # Buang duplikat dengan menghapus fragment dan trailing slash
+                clean_url = parsed.scheme + "://" + parsed.netloc + parsed.path
+                if clean_url.endswith("/"):
+                    clean_url = clean_url[:-1]
+
+                if clean_url not in links:
+                    links.append(clean_url)
+
+            except Exception:
+                continue
+
+    except Exception as e:
+        print(f"[link_collector] Error extracting links: {e}")
+
+    return links
