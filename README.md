@@ -8,7 +8,7 @@ Aplikasi ini dapat:
 - Membatasi jumlah berita (limit)
 - Filter berdasarkan rentang tanggal
 - Menampilkan progress bar saat scraping
-- Export hasil ke CSV
+- Export hasil ke CSV   
 - Tidak freeze (menggunakan threading)
 
 ---
