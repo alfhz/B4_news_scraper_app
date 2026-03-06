@@ -245,3 +245,71 @@ def _is_non_article_link(url, source_url):
             return True
 
     return False
+
+
+def _find_next_page(driver, current_url):
+    """
+    Cari link ke halaman berikutnya (pagination).
+    Fallback bertingkat:
+    1. <a rel="next">
+    2. Link/button dengan text "Next", "Selanjutnya", "›", "»", dsb.
+    3. Link pagination dengan CSS selector umum
+
+    Return URL halaman berikutnya atau None.
+    """
+    # Prioritas 1: <a rel="next">
+    try:
+        next_link = driver.find_element(By.CSS_SELECTOR, 'a[rel="next"]')
+        href = next_link.get_attribute("href")
+        if href:
+            return urljoin(current_url, href)
+    except Exception:
+        pass
+
+    # Prioritas 2: Link/button dengan teks umum untuk "next"
+    next_text_patterns = [
+        "next", "selanjutnya", "berikutnya", "lanjut",
+        "›", "»", "→", ">>", ">",
+        "next page", "halaman berikutnya",
+    ]
+
+    try:
+        all_links = driver.find_elements(By.TAG_NAME, "a")
+        for link in all_links:
+            try:
+                text = link.text.strip().lower()
+                # Cek juga aria-label
+                aria_label = (link.get_attribute("aria-label") or "").strip().lower()
+
+                for pattern in next_text_patterns:
+                    if text == pattern or aria_label == pattern:
+                        href = link.get_attribute("href")
+                        if href and href != current_url:
+                            return urljoin(current_url, href)
+            except Exception:
+                continue
+    except Exception:
+        pass
+
+    # Prioritas 3: CSS selectors umum untuk pagination next
+    pagination_selectors = [
+        '.pagination a.next',
+        '.pagination .next a',
+        '.paging a.next',
+        '.page-nav a.next',
+        'a.page-next',
+        'nav.pagination a:last-child',
+        '.nav-links a.next',
+        'a[class*="next"]',
+        'li[class*="next"] a',
+    ]
+    for selector in pagination_selectors:
+        try:
+            el = driver.find_element(By.CSS_SELECTOR, selector)
+            href = el.get_attribute("href")
+            if href and href != current_url:
+                return urljoin(current_url, href)
+        except Exception:
+            continue
+
+    return None
