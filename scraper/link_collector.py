@@ -192,3 +192,56 @@ def _extract_article_links(driver, base_domain, source_url):
         print(f"[link_collector] Error extracting links: {e}")
 
     return links
+
+
+def _is_non_article_link(url, source_url):
+    """
+    Cek apakah URL kemungkinan bukan artikel berita melainkan
+    halaman navigasi/kategori/dll.
+    Return True jika URL harus DIBUANG.
+    """
+    url_lower = url.lower()
+    parsed = urlparse(url_lower)
+    path = parsed.path
+
+    # Buang jika URL sama dengan halaman sumber
+    if url.rstrip("/") == source_url.rstrip("/"):
+        return True
+
+    # Pattern URL non-artikel
+    non_article_patterns = [
+        "/tag/", "/tags/", "/kategori/", "/category/", "/categories/",
+        "/author/", "/penulis/", "/editor/",
+        "/page/", "/search", "/login", "/register", "/signup",
+        "/about", "/contact", "/privacy", "/terms",
+        "/foto/", "/galeri/", "/gallery/", "/photo/",
+        "/video/", "/videos/",
+        "/indeks", "/index/",
+        "/topik/", "/topic/",
+        "/admin", "/wp-admin", "/wp-login",
+    ]
+    for pattern in non_article_patterns:
+        if pattern in path:
+            return True
+
+    # Buang link ke halaman utama / homepage
+    if path in ("", "/", "/index.html", "/index.php"):
+        return True
+
+    # Buang link media sosial, share, dll.
+    social_domains = [
+        "facebook.com", "twitter.com", "instagram.com", "youtube.com",
+        "tiktok.com", "wa.me", "whatsapp.com", "t.me", "telegram",
+        "linkedin.com", "pinterest.com",
+    ]
+    for social in social_domains:
+        if social in url_lower:
+            return True
+
+    # Buang link file langsung (gambar, pdf, dll)
+    file_extensions = [".jpg", ".jpeg", ".png", ".gif", ".pdf", ".mp4", ".mp3"]
+    for ext in file_extensions:
+        if path.endswith(ext):
+            return True
+
+    return False
