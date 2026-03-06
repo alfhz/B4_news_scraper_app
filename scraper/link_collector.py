@@ -94,3 +94,14 @@ def get_article_links(url, limit):
 
         print(f"[link_collector] Total link terkumpul: {len(collected_links[:limit])}")
         return collected_links[:limit]
+
+    except Exception as e:
+        print(f"[link_collector] Error: {e}")
+        return collected_links[:limit]
+
+    finally:
+        if driver:
+            try:
+                driver.quit()
+            except Exception:
+                pass
