@@ -50,9 +50,10 @@ Aplikasi memiliki beberapa bagian utama:
 
 ---
 ## Screenshot Aplikasi
-
-'tampilanApp.png'
-'tampilanApp2.png'
+<p align="center">
+  <img src="tampilanApp.png" width="600" title="Preview Aplikasi">
+  <img src="tampilanApp2.png" width="600" title="Preview Aplikasi">
+</p>
 
 # Struktur Project
 
@@ -192,7 +193,7 @@ Judul Berita,2024-05-02,Isi artikel...,detik.com,Editor A
 **Muhammad Fawwaz Muzaki**  
 **Nadhief Musyaffa**  
 --------------------------------------------
-Program Studi D4 Teknik Informatika
+Program Studi D4 Teknik Informatika,
 Jurusan Teknik Komputer dan Informatika  
 Politeknik Negeri Bandung (POLBAN)
 
