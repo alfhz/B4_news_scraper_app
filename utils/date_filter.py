@@ -1,17 +1,19 @@
 from datetime import datetime
-def filter_by_date(self, start_date, end_date):
-    start = datetime.strptime(start_date, "%Y-%m-%d")
-    end = datetime.strptime(end_date, "%Y-%m-%d")
+def filter_by_date(data_list, start, end):
+    filtered_data = []
 
-    for row in range(self.table.rowCount()):
-        item = self.table.item(row, 1)  # kolom tanggal (misalnya kolom ke-2)
+    for article in data_list:
+        tanggal = article.get("date")  # kolom tanggal (misalnya kolom ke-2)
         
-        if item is None:
+        if tanggal is None:
+            filtered_data.append(article)
             continue
-
-        tanggal = datetime.strptime(item.text(), "%Y-%m-%d")
-
-        if start <= tanggal <= end:
-            self.table.setRowHidden(row, False)
+        
+        if isinstance(tanggal, datetime):
+            if start <= tanggal <= end:
+                filtered_data.append(article)
         else:
-            self.table.setRowHidden(row, True)
+            filtered_data.append(article)
+            
+    return filtered_data
+

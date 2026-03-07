@@ -1,6 +1,6 @@
 from PyQt5.QtCore import QThread, pyqtSignal
 from scraper.link_collector import get_article_links
-from scraper.article_scraper import scrape_article
+from scraper.article_scraper import scrape_articles
 from utils.date_filter import filter_by_date
 import time
 
@@ -32,7 +32,7 @@ class ScraperThread(QThread):
             # scrape setiap link article satu per satu
             for index, link in enumerate(links):
                 try:
-                    article = scrape_article(link)
+                    article = scrape_articles(link)
                     if article:
                         scraped_data.append(article)
                 except Exception as e:

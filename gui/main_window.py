@@ -139,6 +139,7 @@ QProgressBar::chunk {
 
 QTableWidget {
     background-color: #0f1923;
+    alternate-background-color: #152233;
     border: 1px solid #1e3a52;
     border-radius: 6px;
     gridline-color: #1e3a52;
@@ -430,12 +431,15 @@ class MainWindow(QMainWindow):
 
         try:
             with open(path, "w", newline="", encoding="utf-8-sig") as f:
-                writer = csv.DictWriter(f, fieldnames=["title", "date", "content", "portal", "editor"])
+                writer = csv.DictWriter(f, fieldnames=["title", "date", "portal", "editor", "content"])
                 writer.writeheader()
                 for art in self._articles:
                     row = dict(art)
                     if row.get("date") is not None:
-                        row["date"] = row["date"].strftime("%Y-%m-%d %H:%M:%S")
+                        if hasattr(row["date"], 'strftime'):
+                            row["date"] = row["date"].strftime("%Y-%m-%d %H:%M:%S")
+                        else:
+                            row["date"] = str(row["date"])
                     writer.writerow(row)
             self.status_label.setText(f"Export berhasil: {path}")
             QMessageBox.information(self, "Export Berhasil", f"File disimpan di:\n{path}")
@@ -500,11 +504,16 @@ class MainWindow(QMainWindow):
 
             title   = art.get("title", "-")
             date    = art.get("date", None)
-            content = art.get("content", "")
             portal  = art.get("portal", "-")
             editor  = art.get("editor", "-")
+            content = art.get("content", "")
 
-            date_str = date.strftime("%d-%m-%Y") if date else "N/A"
+            if isinstance(date, str):
+                date_str = date
+            elif hasattr(date, 'strftime'):
+                date_str = date.strftime("%d-%m-%Y")
+            else:
+                date_str = "N/A"
             preview  = content[:150] + "..." if len(content) > 150 else content
 
             no_item = QTableWidgetItem(str(row_idx + 1))
@@ -516,15 +525,15 @@ class MainWindow(QMainWindow):
             self.table.setItem(row_idx, 4, QTableWidgetItem(editor))
             self.table.setItem(row_idx, 5, QTableWidgetItem(preview))
 
-        layout.addWidget(self.url_input)
-        layout.addWidget(self.start_button)
-        layout.addWidget(self.export_button)
-        layout.addWidget(self.table)
-        
-
-        central_widget.setLayout(layout)
-        self.setCentralWidget(central_widget)
         self.export_button.clicked.connect(self.export_to_csv)
+        self._set_scraping_state(False)
+        self.btn_export.setEnabled(True)
+        self.status_label.setText("Scraping selesai!")
+        
+    def show_error(self, message):
+        self._set_scraping_state(False)
+        self.status_label.setText("Terjadi error saat scraping.")
+        QMessageBox.critical(self, "Scraping Error", message)
     def export_to_csv(self):
         path, _ = QFileDialog.getSaveFileName(
             self,

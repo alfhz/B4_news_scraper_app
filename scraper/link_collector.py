@@ -29,6 +29,7 @@ def get_article_links(url, limit):
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--log-level=3")
+        options.page_load_strategy = 'eager'
         options.add_argument(
             "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
             "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -60,8 +61,7 @@ def get_article_links(url, limit):
                 driver.get(current_url)
                 time.sleep(2)  # Tunggu halaman render
             except Exception as e:
-                print(f"[link_collector] Error loading page {current_url}: {e}")
-                break
+                print(f"[link_collector] Timeout/Error, lanjut ambil elemen yg ada: {e}")
 
             # Ambil semua link dari halaman saat ini
             new_links = _extract_article_links(driver, base_domain, url)
