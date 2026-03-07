@@ -1,57 +1,76 @@
+import time
 from PyQt5.QtCore import QThread, pyqtSignal
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from scraper.link_collector import get_article_links
 from scraper.article_scraper import scrape_articles
-from utils.date_filter import filter_by_date
-import time
 
 class ScraperThread(QThread):
-    progress_signal = pyqtSignal(int) # signal untuk mengirimkan progress scraping (progress bar)
-    result_signal = pyqtSignal(list) # signal untuk mengirimkan hasil scraping (list data)
-    error_signal = pyqtSignal(str) # signal untuk mengirimkan error (string)
+    progress_signal = pyqtSignal(int) # buat update progress bar
+    result_signal = pyqtSignal(list) # kirim list hasil ke tabel
+    error_signal = pyqtSignal(str) # kirim pesan error
 
-    # inisialisasi thread 
     def __init__(self, url, limit, start_date=None, end_date=None):
-        super().__init__() # memanggil konstruktor QTread
-        self.url = url # url yang akan di scrape
-        self.limit = limit # batas jumlah artikel yang akan di scrape
-        self.start_date = start_date # filter tanggal, mulai
-        self.end_date = end_date # filter tanggal, akhir
+        super().__init__()
+        self.url = url 
+        self.limit = limit 
+        self.start_date = start_date 
+        self.end_date = end_date 
+        self.is_terminated = False 
     
     def run(self):
+        # setup driver sekali di awal biar efisien
+        chrome_options = Options()
+        chrome_options.add_argument("--headless=new")
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36")
+        
+        driver = webdriver.Chrome(options=chrome_options)
+        
         try:
-            # ambil semua link article
-            links = get_article_links(self.url, self.limit) 
+            # ambil link cadangan agak banyakan (50) biar bisa difilter
+            links = get_article_links(self.url, 50) 
             
-            # jika tidak ditemukan link artikel yang sesuai, kirimkan error
             if not links:
-                self.error_signal.emit("Tidak ditemukan link artikel yang sesuai.") 
+                self.error_signal.emit("Link artikel tidak ditemukan sama sekali.") 
                 return
-            total = len(links)
-            scraped_data = []
-            
-            # scrape setiap link article satu per satu
-            for index, link in enumerate(links):
-                try:
-                    article = scrape_articles(link)
-                    if article:
-                        scraped_data.append(article)
-                except Exception as e:
-                    print(f"Error scraping {link}: {e}")
                 
-                # hitung dan kirim progress scraping ke main thread untuk update progress bar
-                progress = int((index+1) / total * 100)
+            scraped_data = []
+            link_index = 0
+            
+            # loop terus sampe limit terpenuhi atau link abis
+            while len(scraped_data) < self.limit and link_index < len(links):
+                if self.is_terminated:
+                    break
+                
+                link = links[link_index]
+                article = scrape_articles(link, driver)
+                
+                if article:
+                    art_date = article.get("date")
+                    # cek range tanggal
+                    if self.start_date.date() <= art_date <= self.end_date.date():
+                        scraped_data.append(article)
+                        print(f"      [OK] Berhasil scrapping ({len(scraped_data)}/{self.limit})")
+                    else:
+                        print(f"      [SKIP] Tanggal tidak masuk kriteria.")
+                else:
+                    print(f"      [SKIP] Bukan artikel atau konten kosong.")
+
+                # progress bar ngikutin seberapa deket ke target limit
+                progress = int((len(scraped_data) / self.limit) * 100)
                 self.progress_signal.emit(progress)
                 
-                # delay agar tidak membebani server
-                time.sleep(0.5)
+                link_index += 1
+                time.sleep(0.5) # biar gak disangka DDOS
                 
-            # filter tanggal
-            if self.start_date and self.end_date:
-                scraped_data = filter_by_date(scraped_data, self.start_date, self.end_date)
-                
-            # kirim hasil scraping ke GUI
             self.result_signal.emit(scraped_data)
-        
-        # mengirim error ke GUI jika terjadi kesalahan selama scrapping    
+            
         except Exception as e:
             self.error_signal.emit(str(e))
+        finally:
+            driver.quit() # tutup browser kalo udah beres semua
+            print(f"[{time.strftime('%H:%M:%S')}] Browser ditutup. Selesai.")
+
+    def terminate_thread(self):
+        self.is_terminated = True
