@@ -65,8 +65,7 @@ B4_news_scraper_app
 │
 ├── gui
 │   ├── __init__.py
-│   ├── main_window.py
-│   └── style.qss
+│   └── main_window.py
 │
 ├── threads
 │   └── scraper_thread.py
