@@ -191,7 +191,9 @@ Judul Berita,2024-05-02,Isi artikel...,detik.com,Editor A
 **Haidar Azka**  
 **Muhammad Fawwaz Muzaki**  
 **Nadhief Musyaffa**  
-Jurusan Teknik Informatika  
+--------------------------------------------
+Program Studi D4 Teknik Informatika
+Jurusan Teknik Komputer dan Informatika  
 Politeknik Negeri Bandung (POLBAN)
 
 ---
