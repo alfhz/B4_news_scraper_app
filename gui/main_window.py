@@ -220,6 +220,8 @@ class MainWindow(QMainWindow):
             # - Limit ≥ 1.
             # - Start date ≤ End date.
         super().__init__()
+        
+        
         self.setWindowTitle("News Scraper App")
         self.setGeometry(100, 100, 1050, 720)
         self.setStyleSheet(STYLESHEET)
@@ -365,6 +367,8 @@ class MainWindow(QMainWindow):
         prog_label = QLabel("Progress:")
         prog_label.setFixedWidth(60)
 
+        self.start_button = QPushButton("Start Scraping")
+        self.export_button = QPushButton("Export CSV")
         self.progress_bar = QProgressBar()
         self.progress_bar.setValue(0)
         self.progress_bar.setFormat("%p%")
@@ -512,14 +516,30 @@ class MainWindow(QMainWindow):
             self.table.setItem(row_idx, 4, QTableWidgetItem(editor))
             self.table.setItem(row_idx, 5, QTableWidgetItem(preview))
 
-        self._set_scraping_state(False)
-        self.progress_bar.setValue(100)
-        self.status_label.setText(f"Selesai! {len(data)} artikel berhasil diambil.")
-        if len(data) > 0:
-            self.btn_export.setEnabled(True)
+        layout.addWidget(self.url_input)
+        layout.addWidget(self.start_button)
+        layout.addWidget(self.export_button)
+        layout.addWidget(self.table)
+        
 
-    # menangani error saat proses scrapping (error message)
-    def show_error(self, message):
-        QMessageBox.critical(self, "Error Scraping", message)
-        self.status_label.setText(f"Error: {message}")
-        self._set_scraping_state(False)
+        central_widget.setLayout(layout)
+        self.setCentralWidget(central_widget)
+        self.export_button.clicked.connect(self.export_to_csv)
+    def export_to_csv(self):
+        path, _ = QFileDialog.getSaveFileName(
+            self,
+            "Save File",
+            "",
+            "CSV Files (*csv)"
+        )
+        if not path:
+            return
+        with open(path, "w", newline="", encoding="utf-8") as file:
+            writer = csv.writer(file)
+
+            for row in range(self.table.rowCount()):
+                row_data = []
+                for col in range(self.table.columnCount()):
+                    item = self.table.item(row, col)
+                    row_data.append(item.text() if item else "")
+                writer.writerow(row_data)
