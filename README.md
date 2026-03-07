@@ -8,7 +8,7 @@ Aplikasi ini dapat:
 - Membatasi jumlah berita (limit)
 - Filter berdasarkan rentang tanggal
 - Menampilkan progress bar saat scraping
-- Export hasil ke CSV
+- Export hasil ke CSV   
 - Tidak freeze (menggunakan threading)
 
 ---
@@ -23,7 +23,7 @@ Ikuti langkah ini dari awal sampai selesai.
 
 Buka CMD / Git Bash lalu jalankan:
 
-    git clone https://github.com/USERNAME/B4_news_scraper_app.git
+    git clone https://github.com/alfhz/B4_news_scraper_app.git
 
 Masuk ke folder project:
 
