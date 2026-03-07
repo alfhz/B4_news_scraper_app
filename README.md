@@ -5,24 +5,24 @@ Aplikasi ini menyediakan antarmuka GUI yang memungkinkan pengguna mengambil arti
 
 ---
 
-# ✨ Fitur Utama
+# Fitur Utama
 
-- 🔗 **Input URL Berita**
+- **Input URL Berita**
   - Pengguna dapat memasukkan link halaman berita yang ingin di-scrape.
 
-- 📊 **Limit Artikel**
+- **Limit Artikel**
   - Mengatur jumlah maksimal artikel yang akan diambil.
 
-- 📅 **Filter Rentang Tanggal**
+- **Filter Rentang Tanggal**
   - Mengambil artikel hanya dalam rentang tanggal tertentu.
 
-- ⚡ **Threaded Scraping**
+- **Threaded Scraping**
   - Menggunakan `QThread` agar GUI tidak freeze saat proses scraping berjalan.
 
-- 📈 **Progress Monitoring**
+- **Progress Monitoring**
   - Progress bar menampilkan perkembangan proses scraping secara real-time.
 
-- 📋 **Tabel Hasil Scraping**
+- **Tabel Hasil Scraping**
   - Menampilkan:
   - Nomor
   - Judul Artikel
@@ -31,12 +31,12 @@ Aplikasi ini menyediakan antarmuka GUI yang memungkinkan pengguna mengambil arti
   - Editor
   - Preview isi artikel
 
-- 💾 **Export ke CSV**
+- **Export ke CSV**
   - Data hasil scraping dapat disimpan sebagai file `.csv`.
 
 ---
 
-# 🖥️ Tampilan Aplikasi
+# Tampilan Aplikasi
 
 Aplikasi memiliki beberapa bagian utama:
 
@@ -49,12 +49,12 @@ Aplikasi memiliki beberapa bagian utama:
 | Status Bar | Informasi status proses scraping |
 
 ---
-# 🖼️ Screenshot Aplikasi
+# Screenshot Aplikasi
 
 'tampilanApp.png'
 'tampilanApp2.png'
 
-# 📁 Struktur Project
+# Struktur Project
 
 Berikut struktur folder utama project:
 
@@ -91,7 +91,7 @@ B4_news_scraper_app
 
 ---
 
-# ⚙️ Teknologi yang Digunakan
+# Teknologi yang Digunakan
 
 - **Python 3**
 - **PyQt5** → GUI Framework
@@ -104,7 +104,7 @@ B4_news_scraper_app
 
 ---
 
-# 📦 Instalasi
+# Instalasi
 
 ## 1. Clone Repository
 
@@ -141,7 +141,7 @@ pip install PyQt5 selenium requests beautifulsoup4 python-dateutil
 
 ---
 
-# ▶️ Menjalankan Aplikasi
+# ▶Menjalankan Aplikasi
 
 Jalankan aplikasi dengan perintah:
 
@@ -153,7 +153,7 @@ GUI aplikasi akan muncul dan siap digunakan.
 
 ---
 
-# 📋 Cara Menggunakan Aplikasi
+# Cara Menggunakan Aplikasi
 
 1. Masukkan **URL halaman berita** pada kolom input.
 2. Tentukan **limit jumlah artikel** yang ingin diambil.
@@ -165,7 +165,7 @@ GUI aplikasi akan muncul dan siap digunakan.
 
 ---
 
-# 📊 Format Output CSV
+# Format Output CSV
 
 File CSV akan berisi kolom berikut:
 
@@ -181,15 +181,8 @@ Judul Berita,2024-05-02,Isi artikel...,detik.com,Editor A
 
 ---
 
-# ⚠️ Catatan
 
-- Pastikan URL yang dimasukkan merupakan **halaman berita yang valid**.
-- Jika scraping gagal, pesan error akan muncul pada **popup dialog**.
-- Proses scraping berjalan pada **thread terpisah** agar GUI tetap responsif.
-
----
-
-# 👩‍💻 Pengembang
+# Pengembang
 
 **Alifah Zachra Syifatunnajwa**  
 **Alfina Azizah**  
@@ -201,6 +194,6 @@ Politeknik Negeri Bandung (POLBAN)
 
 ---
 
-# 📜 Lisensi
+# Lisensi
 
 Proyek ini dibuat untuk keperluan **pembelajaran dan praktikum**.
