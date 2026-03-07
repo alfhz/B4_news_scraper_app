@@ -49,7 +49,7 @@ Aplikasi memiliki beberapa bagian utama:
 | Status Bar | Informasi status proses scraping |
 
 ---
-# Screenshot Aplikasi
+## Screenshot Aplikasi
 
 'tampilanApp.png'
 'tampilanApp2.png'
