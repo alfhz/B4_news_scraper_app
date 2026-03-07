@@ -1,207 +1,206 @@
-# 📰 News Scraper GUI App
+# 📰 News Scraper App (PyQt5)
 
-Aplikasi desktop untuk scraping berita menggunakan Python, Selenium, dan PyQt5.
-
-Aplikasi ini dapat:
-- Mengambil link artikel dari halaman berita (termasuk pagination)
-- Mengambil detail artikel (judul, tanggal, isi, portal, editor)
-- Membatasi jumlah berita (limit)
-- Filter berdasarkan rentang tanggal
-- Menampilkan progress bar saat scraping
-- Export hasil ke CSV   
-- Tidak freeze (menggunakan threading)
+Aplikasi desktop berbasis **Python + PyQt5** untuk melakukan **scraping artikel berita secara otomatis** dari halaman portal berita.  
+Aplikasi ini menyediakan antarmuka GUI yang memungkinkan pengguna mengambil artikel, memfilter berdasarkan tanggal, dan mengekspor hasilnya ke file CSV.
 
 ---
 
-# 👥 SETUP UNTUK SEMUA ANGGOTA TIM
+# ✨ Fitur Utama
 
-Ikuti langkah ini dari awal sampai selesai.
+- 🔗 **Input URL Berita**
+  - Pengguna dapat memasukkan link halaman berita yang ingin di-scrape.
 
----
+- 📊 **Limit Artikel**
+  - Mengatur jumlah maksimal artikel yang akan diambil.
 
-# 1️⃣ Clone Repository
+- 📅 **Filter Rentang Tanggal**
+  - Mengambil artikel hanya dalam rentang tanggal tertentu.
 
-Buka CMD / Git Bash lalu jalankan:
+- ⚡ **Threaded Scraping**
+  - Menggunakan `QThread` agar GUI tidak freeze saat proses scraping berjalan.
 
-    git clone https://github.com/alfhz/B4_news_scraper_app.git
+- 📈 **Progress Monitoring**
+  - Progress bar menampilkan perkembangan proses scraping secara real-time.
 
-Masuk ke folder project:
+- 📋 **Tabel Hasil Scraping**
+  - Menampilkan:
+  - Nomor
+  - Judul Artikel
+  - Tanggal
+  - Portal
+  - Editor
+  - Preview isi artikel
 
-    cd B4_news_scraper_app
-
----
-
-# 2️⃣ Buat Virtual Environment
-
-Buat environment baru:
-
-    python -m venv venv
-
-Aktifkan:
-
-Windows (CMD):
-    venv\Scripts\activate
-
-Windows (Git Bash):
-    source venv/Scripts/activate
-
-Jika berhasil, akan muncul `(venv)` di awal terminal.
+- 💾 **Export ke CSV**
+  - Data hasil scraping dapat disimpan sebagai file `.csv`.
 
 ---
 
-# 3️⃣ Install Dependency
+# 🖥️ Tampilan Aplikasi
 
-Install semua library yang dibutuhkan:
+Aplikasi memiliki beberapa bagian utama:
 
-    pip install -r requirements.txt
-
-Pastikan tidak ada error.
-
----
-
-# 4️⃣ Test Jalankan Aplikasi
-
-    python main.py
-
-Jika window aplikasi muncul → setup berhasil ✅
+| Bagian | Deskripsi |
+|------|------|
+| Header | Judul aplikasi dan deskripsi |
+| Input Panel | URL berita, limit artikel, dan filter tanggal |
+| Progress Section | Progress bar proses scraping |
+| Table Section | Tabel hasil artikel yang ditemukan |
+| Status Bar | Informasi status proses scraping |
 
 ---
+# 🖼️ Screenshot Aplikasi
 
-# 5️⃣ WAJIB Buat Branch Masing-Masing
+'tampilanApp.png'
+'tampilanApp2.png'
 
-⚠ DILARANG kerja langsung di branch `main`.
+# 📁 Struktur Project
 
-Buat branch sesuai nama masing-masing (huruf kecil semua):
+Berikut struktur folder utama project:
 
-    git branch nama
-    git checkout nama
-
-
-Cek branch aktif:
-
-    git branch
-
-Branch dengan tanda `*` adalah branch aktif.
-
----
-
-# 6️⃣ Workflow Kerja Harian
-
-Setiap selesai kerja:
-
-    git add .
-    git commit -m "Deskripsi perubahan"
-    git push origin nama-branch
-
-Contoh:
-
-    git push origin scraper-link
-
----
-
-# 7️⃣ Update dari Main (Jika Diperlukan)
-
-Jika branch `main` sudah di-update oleh anggota lain:
-
-    git checkout main
-    git pull origin main
-    git checkout nama-branch
-    git merge main
-
-Jika ada konflik → diskusikan dulu sebelum resolve.
-
----
-
-# 🚫 ATURAN PENTING
-
-- ❌ Jangan kerja di branch main
-- ❌ Jangan ubah struktur folder tanpa diskusi
-- ❌ Jangan ubah kontrak data
-- ❌ Jangan push folder venv
-- ❌ Jangan push file __pycache__
-- ❌ Jangan merge tanpa testing minimal
-
----
-
-# 📂 Struktur Proyek
-
-B4_news_scraper_app/
+```
+B4_news_scraper_app
 │
 ├── main.py
 │
-├── gui/
-│   └── main_window.py
+├── gui
+│   ├── __init__.py
+│   ├── main_window.py
+│   └── style.qss
 │
-├── scraper/
-│   ├── link_collector.py
-│   └── article_scraper.py
-│
-├── threads/
+├── threads
 │   └── scraper_thread.py
 │
-├── utils/
-│   ├── export.py
-│   └── date_filter.py
+├── scraper
+│   └── article_scraper.py
 │
-├── requirements.txt
-├── README.md
-└── .gitignore
+├── utils
+│
+└── README.md
+```
+
+### Penjelasan Folder
+
+| Folder | Fungsi |
+|------|------|
+| gui | Berisi kode GUI PyQt5 |
+| threads | Thread untuk menjalankan proses scraping |
+| scraper | Logic scraping artikel |
+| utils | Fungsi tambahan / helper |
+| main.py | Entry point aplikasi |
 
 ---
 
-# 📦 Dependency
+# ⚙️ Teknologi yang Digunakan
 
-Library yang digunakan:
-- PyQt5
-- selenium
-- pandas
-- python-dateutil
-
-Semua akan terinstall otomatis dengan:
-
-    pip install -r requirements.txt
-
----
-
-# 📊 Kontrak Data Artikel (WAJIB)
-
-Semua artikel harus berbentuk:
-
-    {
-      "title": str,
-      "date": datetime | None,
-      "content": str,
-      "portal": str,
-      "editor": str
-    }
-
-⚠ date HARUS bertipe datetime, bukan string.  
-⚠ Jika parsing gagal → date = None.
+- **Python 3**
+- **PyQt5** → GUI Framework
+- **Selenium** → Scrapper
+- **Requests** → HTTP request
+- **BeautifulSoup4** → HTML parsing
+- **CSV module** → Export data
+- **python-dateutil** → Date
+- **QThread** → Asynchronous processing
 
 ---
 
-# 🎯 Target Akhir Project
+# 📦 Instalasi
 
-Aplikasi harus bisa:
+## 1. Clone Repository
 
-- Input URL berita
-- Ambil link artikel + pagination
-- Ambil title, date(datetime), content, portal, editor
-- Batasi jumlah berita (limit)
-- Filter berdasarkan tanggal
-- Tampilkan progress bar
-- Export CSV
-- Tidak freeze
-- Tidak crash
+```bash
+git clone https://github.com/alfhz/B4_news_scraper_app.git
+cd B4_news_scraper_app
+```
 
 ---
 
-# 🔥 Attention!
+## 2. Buat Virtual Environment
 
-- Commit kecil tapi sering
-- Jangan tunggu file selesai 100% baru commit
-- Update branch secara berkala
-- Diskusi sebelum merge
-- Jaga format data tetap konsisten
+Windows:
+
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+Mac/Linux:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
 
 ---
+
+## 3. Install Dependencies
+
+```bash
+pip install PyQt5 selenium requests beautifulsoup4 python-dateutil
+```
+
+---
+
+# ▶️ Menjalankan Aplikasi
+
+Jalankan aplikasi dengan perintah:
+
+```bash
+python main.py
+```
+
+GUI aplikasi akan muncul dan siap digunakan.
+
+---
+
+# 📋 Cara Menggunakan Aplikasi
+
+1. Masukkan **URL halaman berita** pada kolom input.
+2. Tentukan **limit jumlah artikel** yang ingin diambil.
+3. Pilih **rentang tanggal artikel**.
+4. Klik **Start Scraping**.
+5. Tunggu hingga progress selesai.
+6. Hasil artikel akan muncul di tabel.
+7. Klik **Export CSV** untuk menyimpan data.
+
+---
+
+# 📊 Format Output CSV
+
+File CSV akan berisi kolom berikut:
+
+```
+title,date,portal,editor,content
+```
+
+Contoh:
+
+```
+Judul Berita,2024-05-02,Isi artikel...,detik.com,Editor A
+```
+
+---
+
+# ⚠️ Catatan
+
+- Pastikan URL yang dimasukkan merupakan **halaman berita yang valid**.
+- Jika scraping gagal, pesan error akan muncul pada **popup dialog**.
+- Proses scraping berjalan pada **thread terpisah** agar GUI tetap responsif.
+
+---
+
+# 👩‍💻 Pengembang
+
+**Alifah Zachra Syifatunnajwa**  
+**Alfina Azizah**  
+**Haidar Azka**  
+**Muhammad Fawwaz Muzaki**  
+**Nadhief Musyaffa**  
+Jurusan Teknik Informatika  
+Politeknik Negeri Bandung (POLBAN)
+
+---
+
+# 📜 Lisensi
+
+Proyek ini dibuat untuk keperluan **pembelajaran dan praktikum**.
